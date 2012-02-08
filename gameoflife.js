@@ -5,6 +5,7 @@
 
 var GameOfLife = {};
 
+// Model
 GameOfLife.horizontalSize = 10;
 GameOfLife.verticalSize = 10;
 GameOfLife.currentBoardPoints = [];
@@ -28,6 +29,58 @@ var boardPoint = function (spec) {
 	
 	return that;
 };
+
+// Drawing
+GameOfLife.currentBoardPoints.draw = function (context, offset, paddingAroundGrid, sizeOfSquare) {
+	for (i = 0; i < this.length; i += 1) {
+		context.rect(offset + paddingAroundGrid + (this[i].getX()-1)*sizeOfSquare, offset + paddingAroundGrid + (this[i].getY()-1)*sizeOfSquare, sizeOfSquare, sizeOfSquare);
+		context.fillStyle = "black";
+		context.fill();
+	}
+};
+
+
+GameOfLife.boardWidth = 400;
+GameOfLife.boardHeight = 400;
+//padding around grid
+GameOfLife.paddingAroundGrid = 10;
+//size of canvas
+GameOfLife.canvasWidth = GameOfLife.boardWidth + (GameOfLife.paddingAroundGrid*2) + 1;
+GameOfLife.canvasHeight = GameOfLife.boardHeight + (GameOfLife.paddingAroundGrid*2) + 1;
+
+GameOfLife.sizeOfSquare = 40;
+GameOfLife.offset = 0.5;
+
+GameOfLife.drawBoard = function(){
+    for (var x = 0; x <= this.boardWidth; x += this.sizeOfSquare) {
+        this.context.moveTo(this.offset + x + this.paddingAroundGrid, this.paddingAroundGrid);
+        this.context.lineTo(this.offset + x + this.paddingAroundGrid, this.boardHeight + this.paddingAroundGrid);
+    }
+
+
+    for (var x = 0; x <= this.boardHeight; x += this.sizeOfSquare) {
+        this.context.moveTo(this.paddingAroundGrid, this.offset + x + this.paddingAroundGrid);
+        this.context.lineTo(this.boardWidth + this.paddingAroundGrid, this.offset + x + this.paddingAroundGrid);
+    }
+
+    this.context.strokeStyle = "black";
+    //context.strokeStyle = "lightgray";
+    this.context.stroke();
+};
+
+GameOfLife.drawSquareFromMousePoint = function (pointX, pointY){
+		pointX = pointX - (this.offset + this.paddingAroundGrid);
+		pointY = pointY - (this.offset + this.paddingAroundGrid);
+		x = pointX / this.sizeOfSquare;
+		y = pointY / this.sizeOfSquare;
+		//alert(x);
+		//drawGenericSquare(Math.ceil(x), Math.ceil(y));
+		this.addBoardPoint(boardPoint({x: Math.ceil(x), y: Math.ceil(y)}));
+		//this.drawBoard();
+		GameOfLife.currentBoardPoints.draw(GameOfLife.context, GameOfLife.offset, GameOfLife.paddingAroundGrid, GameOfLife.sizeOfSquare);
+};
+
+  
 
 
 //GameOfLife.currentGameState = {	
@@ -66,7 +119,7 @@ function getMousePos(canvas, evt){
 $(document).ready(function(){
      //alert("Thanks for visiting!");
 	//grid width and height
-	var bw = 400;
+	/*var bw = 400;
 	var bh = 400;
 	//padding around grid
 	var paddingAroundGrid = 10;
@@ -96,9 +149,9 @@ $(document).ready(function(){
 	    context.strokeStyle = "black";
 	    //context.strokeStyle = "lightgray";
 	    context.stroke();
-	}
+	}*/
 	
-	function drawOneSquare(){
+	/*function drawOneSquare(){
 		//context.rect(topLeftCornerX, topLeftCornerY, width, height);
 		context.rect(offset + paddingAroundGrid, offset + paddingAroundGrid, sizeOfSquare, sizeOfSquare);
 		context.fillStyle = "black";
@@ -134,7 +187,7 @@ $(document).ready(function(){
 	  	GameOfLife.addBoardPoint(point1);
 	  	GameOfLife.addBoardPoint(point2);
 	  	GameOfLife.addBoardPoint(point3);
-	}
+	}*/
 	
 	/*Array.method('boardPoints', function(f, value){
 		var i;
@@ -158,36 +211,53 @@ $(document).ready(function(){
 	    return value;
 	});*/
 	
-	var myBoardPoint = boardPoint({x: 8, y: 8});
-	GameOfLife.addBoardPoint(myBoardPoint);	
 	
-	GameOfLife.currentBoardPoints.draw = function (context, offset, paddingAroundGrid, sizeOfSquare) {
+	
+	/*GameOfLife.currentBoardPoints.draw = function (context, offset, paddingAroundGrid, sizeOfSquare) {
 		for (i = 0; i < this.length; i += 1) {
 			context.rect(offset + paddingAroundGrid + (this[i].getX()-1)*sizeOfSquare, offset + paddingAroundGrid + (this[i].getY()-1)*sizeOfSquare, sizeOfSquare, sizeOfSquare);
 			context.fillStyle = "black";
 			context.fill();
 		}
-}
+	}*/
 	
 	//generateStartBoard();
 		
 	
 	
-	drawBoard();		
+	//drawBoard();		
 	//drawOneSquare();	
 	//drawOneAnotherSquare();  
-	drawGenericSquare(3,2);
-	drawGenericSquare(1,1);
-	drawGenericSquare(5,7); 
 	
-	GameOfLife.currentBoardPoints.draw(context, offset, paddingAroundGrid, sizeOfSquare);
+	// Init board
+	GameOfLife.canvas = $('<canvas/>').attr({width: GameOfLife.canvasWidth, height: GameOfLife.canvasHeight}).appendTo('body');
+	GameOfLife.context = GameOfLife.canvas.get(0).getContext("2d");
+	GameOfLife.canvas.get(0).addEventListener('click', function(evt){
+		var mousePos = getMousePos(GameOfLife.canvas.get(0), evt);
+		var message = "Mouse position: " + mousePos.x + "," + mousePos.y;
+		//writeMessage(canvas.get(0), message);
+		//alert(message);
+		GameOfLife.drawSquareFromMousePoint(mousePos.x, mousePos.y);
+		}, false);
 	
-	canvas.get(0).addEventListener('click', function(evt){
-    	var mousePos = getMousePos(canvas.get(0), evt);
+	//var myBoardPoint = ;
+	GameOfLife.addBoardPoint(boardPoint({x: 8, y: 8}));	
+	GameOfLife.addBoardPoint(boardPoint({x: 3, y: 8}));
+	GameOfLife.addBoardPoint(boardPoint({x: 8, y: 3}));
+	
+	GameOfLife.drawBoard();
+	//drawGenericSquare(3,2);
+	//drawGenericSquare(1,1);
+	//drawGenericSquare(5,7); 
+	
+	GameOfLife.currentBoardPoints.draw(GameOfLife.context, GameOfLife.offset, GameOfLife.paddingAroundGrid, GameOfLife.sizeOfSquare);
+	
+	/*GameOfLife.canvas.get(0).addEventListener('click', function(evt){
+    	var mousePos = getMousePos(GameOfLife.canvas.get(0), evt);
     	var message = "Mouse position: " + mousePos.x + "," + mousePos.y;
     	//writeMessage(canvas.get(0), message);
     	//alert(message);
-    	drawSquareFromMousePoint(mousePos.x, mousePos.y);
-		}, false);
+    	GameOfLife.drawSquareFromMousePoint(mousePos.x, mousePos.y);
+		}, false);*/
 	  
  	});
