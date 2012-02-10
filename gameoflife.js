@@ -16,6 +16,13 @@ GameOfLife.resetState = function(){
 	this.currentBoardPoints = [];
 };
 
+GameOfLife.removePoint = function(boardPoint){
+	for (i = 0; i < this.currentBoardPoints.length; i += 1) {
+		if (this.currentBoardPoints[i].getX() == boardPoint.getX() && this.currentBoardPoints[i].getY() == boardPoint.getY())
+			this.currentBoardPoints.splice(i, 1);
+	}
+};
+
 var boardPoint = function (spec) {
 	var that = {};
 	
@@ -31,14 +38,72 @@ var boardPoint = function (spec) {
 };
 
 // Drawing
-GameOfLife.currentBoardPoints.draw = function (context, offset, paddingAroundGrid, sizeOfSquare) {
+GameOfLife.currentBoardPoints.draw = function (gameOfLife) {
 	for (i = 0; i < this.length; i += 1) {
-		context.rect(offset + paddingAroundGrid + (this[i].getX()-1)*sizeOfSquare, offset + paddingAroundGrid + (this[i].getY()-1)*sizeOfSquare, sizeOfSquare, sizeOfSquare);
-		context.fillStyle = "black";
-		context.fill();
+		gameOfLife.context.rect(gameOfLife.offset + gameOfLife.paddingAroundGrid + (this[i].getX()-1)*gameOfLife.sizeOfSquare, gameOfLife.offset + gameOfLife.paddingAroundGrid + (this[i].getY()-1)*gameOfLife.sizeOfSquare, gameOfLife.sizeOfSquare, gameOfLife.sizeOfSquare);
+		gameOfLife.context.fillStyle = "black";
+		gameOfLife.context.fill();
 	}
 };
 
+GameOfLife.nextStep = function(){
+	//this.currentBoardPoints.next(GameOfLife);
+	// go through all points
+		// for each point find out if it should be kept
+		
+	for (i = 0; i < this.currentBoardPoints.length; i += 1) {
+		var numOfNeighbours = GameOfLife.numOfNeighbours(this.currentBoardPoints[i]);
+		//alert("x value: " + this.currentBoardPoints[i].getX());
+	}		
+};
+
+GameOfLife.numOfNeighbours = function (aBoardPoint) {
+	
+	var x = aBoardPoint.getX();
+	var y = aBoardPoint.getY();
+	var numOfNeighbours = 0;
+	var countIfNeighbours = function(neighbourPoint){
+		if(GameOfLife.hasBoardPoint(neighbourPoint)){
+			numOfNeighbours += 1;
+		}
+	};
+	
+	// above to left
+	countIfNeighbours(boardPoint({x: x-1, y: y-1}));
+	// check if valid! (that point is on board)	
+	
+	// above
+	countIfNeighbours(boardPoint({x: x, y: y-1}));
+	// check if valid! (that point is on board)		
+	
+	// above to right
+	countIfNeighbours(boardPoint({x: x+1, y: y-1}));
+	
+	// to right
+	countIfNeighbours(boardPoint({x: x+1, y: y}));
+	
+	// below to right
+	countIfNeighbours(boardPoint({x: x+1, y: y+1}));
+	
+	// below
+	countIfNeighbours(boardPoint({x: x, y: y+1}));
+	
+	// below to left
+	countIfNeighbours(boardPoint({x: x-1, y: y+1}));
+	
+	// to left
+	countIfNeighbours(boardPoint({x: x-1, y: y}));
+	
+	return numOfNeighbours;
+};
+
+GameOfLife.hasBoardPoint = function (boardPoint) {
+	for (i = 0; i < this.currentBoardPoints.length; i += 1) {
+		if (this.currentBoardPoints[i].getX() == boardPoint.getX() && this.currentBoardPoints[i].getY() == boardPoint.getY())
+			return true;
+	}
+	return false;
+};
 
 GameOfLife.boardWidth = 400;
 GameOfLife.boardHeight = 400;
@@ -76,15 +141,8 @@ GameOfLife.drawSquareFromMousePoint = function (pointX, pointY){
 		//alert(x);
 		//drawGenericSquare(Math.ceil(x), Math.ceil(y));
 		this.addBoardPoint(boardPoint({x: Math.ceil(x), y: Math.ceil(y)}));
-		//this.drawBoard();
-		GameOfLife.currentBoardPoints.draw(GameOfLife.context, GameOfLife.offset, GameOfLife.paddingAroundGrid, GameOfLife.sizeOfSquare);
+		GameOfLife.currentBoardPoints.draw(GameOfLife);
 };
-
-  
-
-
-//GameOfLife.currentGameState = {	
-//};
 
 
 function writeMessage(canvas, message){
@@ -117,117 +175,6 @@ function getMousePos(canvas, evt){
 
 
 $(document).ready(function(){
-     //alert("Thanks for visiting!");
-	//grid width and height
-	/*var bw = 400;
-	var bh = 400;
-	//padding around grid
-	var paddingAroundGrid = 10;
-	//size of canvas
-	var cw = bw + (paddingAroundGrid*2) + 1;
-	var ch = bh + (paddingAroundGrid*2) + 1;
-	
-	var sizeOfSquare = 40;
-	var offset = 0.5;
-	
-	var canvas = $('<canvas/>').attr({width: cw, height: ch}).appendTo('body');
-	
-	var context = canvas.get(0).getContext("2d");
-	
-	function drawBoard(){
-	    for (var x = 0; x <= bw; x += sizeOfSquare) {
-	        context.moveTo(offset + x + paddingAroundGrid, paddingAroundGrid);
-	        context.lineTo(offset + x + paddingAroundGrid, bh + paddingAroundGrid);
-	    }
-	
-	
-	    for (var x = 0; x <= bh; x += sizeOfSquare) {
-	        context.moveTo(paddingAroundGrid, offset + x + paddingAroundGrid);
-	        context.lineTo(bw + paddingAroundGrid, offset + x + paddingAroundGrid);
-	    }
-	
-	    context.strokeStyle = "black";
-	    //context.strokeStyle = "lightgray";
-	    context.stroke();
-	}*/
-	
-	/*function drawOneSquare(){
-		//context.rect(topLeftCornerX, topLeftCornerY, width, height);
-		context.rect(offset + paddingAroundGrid, offset + paddingAroundGrid, sizeOfSquare, sizeOfSquare);
-		context.fillStyle = "black";
-		context.fill();
-	}
-	
-	function drawOneAnotherSquare(){
-		//context.rect(topLeftCornerX, topLeftCornerY, width, height);
-		context.rect(offset + paddingAroundGrid + 4*sizeOfSquare, offset + paddingAroundGrid + 6*sizeOfSquare, sizeOfSquare, sizeOfSquare);
-		context.fillStyle = "black";
-		context.fill();
-	}
-	
-	function drawGenericSquare(x, y){
-		context.rect(offset + paddingAroundGrid + (x-1)*sizeOfSquare, offset + paddingAroundGrid + (y-1)*sizeOfSquare, sizeOfSquare, sizeOfSquare);
-		context.fillStyle = "black";
-		context.fill();
-	}
-	
-	function drawSquareFromMousePoint(pointX, pointY){
-		pointX = pointX - (offset + paddingAroundGrid);
-		pointY = pointY - (offset + paddingAroundGrid);
-		x = pointX / sizeOfSquare;
-		y = pointY / sizeOfSquare;
-		//alert(x);
-		drawGenericSquare(Math.ceil(x), Math.ceil(y));
-	}
-
-	function generateStartBoard(){
-		var point1 = boardPoint({x: 3, y: 2});
-		var point2 = boardPoint({x: 4, y: 5});
-		var point3 = boardPoint({x: 5, y: 7});
-	  	GameOfLife.addBoardPoint(point1);
-	  	GameOfLife.addBoardPoint(point2);
-	  	GameOfLife.addBoardPoint(point3);
-	}*/
-	
-	/*Array.method('boardPoints', function(f, value){
-		var i;
-		for(i = 0; i < this.length; i += 1){
-			var boardPoint = this[i];
-			f(boardPoint.getX(), boardPoint.getY());
-		}	
-		return value;			
-	});*/
-	
-	/*Function.prototype.method = function (name, func) {
-    	this.prototype[name] = func;
-    	return this;
-	};
-	
-	Array.method('reduce', function (f, value) {
-	    var i;
-	    for (i = 0; i < this.length; i += 1) {
-	        value = f(this[i], value);
-	    }
-	    return value;
-	});*/
-	
-	
-	
-	/*GameOfLife.currentBoardPoints.draw = function (context, offset, paddingAroundGrid, sizeOfSquare) {
-		for (i = 0; i < this.length; i += 1) {
-			context.rect(offset + paddingAroundGrid + (this[i].getX()-1)*sizeOfSquare, offset + paddingAroundGrid + (this[i].getY()-1)*sizeOfSquare, sizeOfSquare, sizeOfSquare);
-			context.fillStyle = "black";
-			context.fill();
-		}
-	}*/
-	
-	//generateStartBoard();
-		
-	
-	
-	//drawBoard();		
-	//drawOneSquare();	
-	//drawOneAnotherSquare();  
 	
 	// Init board
 	GameOfLife.canvas = $('<canvas/>').attr({width: GameOfLife.canvasWidth, height: GameOfLife.canvasHeight}).appendTo('body');
@@ -250,14 +197,7 @@ $(document).ready(function(){
 	//drawGenericSquare(1,1);
 	//drawGenericSquare(5,7); 
 	
-	GameOfLife.currentBoardPoints.draw(GameOfLife.context, GameOfLife.offset, GameOfLife.paddingAroundGrid, GameOfLife.sizeOfSquare);
+	GameOfLife.currentBoardPoints.draw(GameOfLife);
 	
-	/*GameOfLife.canvas.get(0).addEventListener('click', function(evt){
-    	var mousePos = getMousePos(GameOfLife.canvas.get(0), evt);
-    	var message = "Mouse position: " + mousePos.x + "," + mousePos.y;
-    	//writeMessage(canvas.get(0), message);
-    	//alert(message);
-    	GameOfLife.drawSquareFromMousePoint(mousePos.x, mousePos.y);
-		}, false);*/
-	  
+	//alert(GameOfLife.currentBoardPoints.numOfNeighbours());
  	});
