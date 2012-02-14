@@ -134,14 +134,102 @@ describe('Game Of Life', function () {
 		  	GameOfLife.addBoardPoint(neightbourBoardPoint);
 			
 			expect(GameOfLife.numOfNeighbours(myBoardPoint)).toEqual(1);
+		  });	
+		  
+		  it('when have two neightbours should have neighbour count of 2', function () {
+		  	var neightbourBoardPoint1 = boardPoint({x: 2, y: 2});
+		  	var neightbourBoardPoint2 = boardPoint({x: 2, y: 1});
+		  	var myBoardPoint = boardPoint({x: 3, y: 2});
+		  	GameOfLife.addBoardPoint(myBoardPoint);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint1);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint2);
+			
+			expect(GameOfLife.numOfNeighbours(myBoardPoint)).toEqual(2);
+		  });	
+		  
+		    it('when have three neightbours should have neighbour count of 3', function () {
+		  	var neightbourBoardPoint1 = boardPoint({x: 2, y: 2});
+		  	var neightbourBoardPoint2 = boardPoint({x: 2, y: 1});
+		  	var neightbourBoardPoint3 = boardPoint({x: 3, y: 1});
+		  	var myBoardPoint = boardPoint({x: 3, y: 2});
+		  	GameOfLife.addBoardPoint(myBoardPoint);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint1);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint2);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint3);
+			
+			expect(GameOfLife.numOfNeighbours(myBoardPoint)).toEqual(3);
 		  });			  	  		  		  		  	  
 		  
-		  /*it('one single point should die', function () {
+		  it('one single point should die in next step', function () {
 		  	var myBoardPoint = boardPoint({x: 3, y: 2});
 		  	GameOfLife.addBoardPoint(myBoardPoint);
 			expect(GameOfLife.currentBoardPoints.length).toEqual(1);
 			
 			GameOfLife.nextStep();
 			expect(GameOfLife.currentBoardPoints.length).toEqual(0);
-		  });*/
+		  });
+		  
+		  it('point with one neighbour should die in next step', function () {
+		  	var myBoardPoint = boardPoint({x: 3, y: 2});
+		  	GameOfLife.addBoardPoint(myBoardPoint);
+		  	var neightbourBoardPoint1 = boardPoint({x: 2, y: 1});
+		  	
+			GameOfLife.nextStep();
+			expect(GameOfLife.currentBoardPoints.length).toEqual(0);
+		  });
+		  
+		  it('point with two neightbours should live', function () {
+		  	var neightbourBoardPoint1 = boardPoint({x: 2, y: 2});
+		  	var neightbourBoardPoint2 = boardPoint({x: 2, y: 1});
+		  	var myBoardPoint = boardPoint({x: 3, y: 2});
+		  	GameOfLife.addBoardPoint(myBoardPoint);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint1);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint2);
+			
+			GameOfLife.nextStep();
+			expect(GameOfLife.hasBoardPoint(myBoardPoint)).toBeTruthy();
+		  });	
+		  
+		  it('point with three neightbours should live', function () {
+		  	var neightbourBoardPoint1 = boardPoint({x: 2, y: 2});
+		  	var neightbourBoardPoint2 = boardPoint({x: 2, y: 1});
+		  	var neightbourBoardPoint3 = boardPoint({x: 3, y: 1});
+		  	var myBoardPoint = boardPoint({x: 3, y: 2});
+		  	GameOfLife.addBoardPoint(myBoardPoint);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint1);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint2);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint3);
+			
+			GameOfLife.nextStep();
+			expect(GameOfLife.hasBoardPoint(myBoardPoint)).toBeTruthy();
+		  });			  		  
+		 
+		  it('point with four neightbours should die', function () {
+		  	var neightbourBoardPoint1 = boardPoint({x: 2, y: 2});
+		  	var neightbourBoardPoint2 = boardPoint({x: 2, y: 1});
+		  	var neightbourBoardPoint3 = boardPoint({x: 3, y: 1});
+		  	var neightbourBoardPoint4 = boardPoint({x: 4, y: 1});
+		  	var myBoardPoint = boardPoint({x: 3, y: 2});
+		  	GameOfLife.addBoardPoint(myBoardPoint);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint1);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint2);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint3);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint4);
+			
+			GameOfLife.nextStep();
+			expect(GameOfLife.hasBoardPoint(myBoardPoint)).toBeFalsy();
+		  });	
+		  
+		  it('dead point with three neightbours should live', function () {
+		  	var neightbourBoardPoint1 = boardPoint({x: 2, y: 2});
+		  	var neightbourBoardPoint2 = boardPoint({x: 2, y: 1});
+		  	var neightbourBoardPoint3 = boardPoint({x: 3, y: 1});
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint1);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint2);
+		  	GameOfLife.addBoardPoint(neightbourBoardPoint3);
+		  	var myBoardPoint = boardPoint({x: 3, y: 2});
+			
+			GameOfLife.nextStep();
+			expect(GameOfLife.hasBoardPoint(myBoardPoint)).toBeTruthy();
+		  });			  		  		  		  
 		});

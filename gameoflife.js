@@ -40,21 +40,56 @@ var boardPoint = function (spec) {
 // Drawing
 GameOfLife.currentBoardPoints.draw = function (gameOfLife) {
 	for (i = 0; i < this.length; i += 1) {
-		gameOfLife.context.rect(gameOfLife.offset + gameOfLife.paddingAroundGrid + (this[i].getX()-1)*gameOfLife.sizeOfSquare, gameOfLife.offset + gameOfLife.paddingAroundGrid + (this[i].getY()-1)*gameOfLife.sizeOfSquare, gameOfLife.sizeOfSquare, gameOfLife.sizeOfSquare);
+		gameOfLife.context.rect(gameOfLife.offset + gameOfLife.paddingAroundGrid + (this[i].getX()-1)*gameOfLife.sizeOfSquare, gameOfLife.offset + 
+			gameOfLife.paddingAroundGrid + (this[i].getY()-1)*gameOfLife.sizeOfSquare, gameOfLife.sizeOfSquare, gameOfLife.sizeOfSquare);
 		gameOfLife.context.fillStyle = "black";
 		gameOfLife.context.fill();
 	}
 };
 
+// The initial pattern constitutes the seed of the system. The first generation is created by applying the above 
+// rules simultaneously to every cell in the seed—births and deaths occur simultaneously, and the discrete moment 
+// at which this happens is sometimes called a tick (in other words, each generation is a pure function of the 
+// preceding one). The rules continue to be applied repeatedly to create further generations.
 GameOfLife.nextStep = function(){
 	//this.currentBoardPoints.next(GameOfLife);
 	// go through all points
 		// for each point find out if it should be kept
 		
-	for (i = 0; i < this.currentBoardPoints.length; i += 1) {
-		var numOfNeighbours = GameOfLife.numOfNeighbours(this.currentBoardPoints[i]);
+	//for (i = 0; i < this.currentBoardPoints.length; i += 1) {
+		//var numOfNeighbours = GameOfLife.numOfNeighbours(this.currentBoardPoints[i]);
 		//alert("x value: " + this.currentBoardPoints[i].getX());
-	}		
+	//}		
+	
+	var nextGenBoardPoints = [];
+	// loop through all points
+	for (var x = 1; x <= this.horizontalSize; x += 1){
+		for (var y = 1; y <= this.verticalSize; y += 1){
+		// for each point find if it is dead og live
+			if (this.hasBoardPoint(boardPoint({x: x, y: y}))){
+				// if live, apply rules against current points, still live cells are added to next gen list	
+				var numOfNeighbours = GameOfLife.numOfNeighbours(boardPoint({x: x, y: y}));
+				if (2 <= numOfNeighbours && numOfNeighbours <= 3){
+					nextGenBoardPoints.push(boardPoint({x: x, y: y}));
+				}
+			}
+			else{
+				// if dead, apply rule against current points, still live cells are added to next gen list	
+				var numOfNeighbours = GameOfLife.numOfNeighbours(boardPoint({x: x, y: y}));
+				if (numOfNeighbours === 3){
+					nextGenBoardPoints.push(boardPoint({x: x, y: y}));
+				}
+			}
+		}
+	}
+		
+	// replace current list with next gen list
+	//this.currentBoardPoints.clear();
+	this.currentBoardPoints.length = 0;
+	for (i = 0; i < nextGenBoardPoints.length; i += 1) {
+		this.currentBoardPoints.push(nextGenBoardPoints[i]);
+	}
+	//this.currentBoardPoints = nextGenBoardPoints;
 };
 
 GameOfLife.numOfNeighbours = function (aBoardPoint) {
@@ -173,6 +208,22 @@ function getMousePos(canvas, evt){
     };
 };
 
+function pausecomp(ms) {
+	ms += new Date().getTime();
+	while (new Date() < ms){}
+}; 
+
+function updateBoard(){
+	//alert("gfdg");
+	GameOfLife.nextStep();
+	//pausecomp(2000);
+	
+	GameOfLife.context.clearRect(0, 0, GameOfLife.canvasWidth, GameOfLife.canvasHeight);
+	GameOfLife.context.beginPath();
+
+	GameOfLife.drawBoard();
+	GameOfLife.currentBoardPoints.draw(GameOfLife);	
+};
 
 $(document).ready(function(){
 	
@@ -188,15 +239,16 @@ $(document).ready(function(){
 		}, false);
 	
 	//var myBoardPoint = ;
-	GameOfLife.addBoardPoint(boardPoint({x: 8, y: 8}));	
-	GameOfLife.addBoardPoint(boardPoint({x: 3, y: 8}));
-	GameOfLife.addBoardPoint(boardPoint({x: 8, y: 3}));
+	GameOfLife.addBoardPoint(boardPoint({x: 4, y: 2}));	
+	GameOfLife.addBoardPoint(boardPoint({x: 4, y: 3}));
+	GameOfLife.addBoardPoint(boardPoint({x: 4, y: 4}));
 	
 	GameOfLife.drawBoard();
 	//drawGenericSquare(3,2);
 	//drawGenericSquare(1,1);
 	//drawGenericSquare(5,7); 
 	
+	//GameOfLife.nextStep();
 	GameOfLife.currentBoardPoints.draw(GameOfLife);
 	
 	//alert(GameOfLife.currentBoardPoints.numOfNeighbours());
