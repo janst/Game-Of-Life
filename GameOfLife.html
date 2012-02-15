@@ -11,20 +11,29 @@
 		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
 		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
 		<link rel="stylesheet" type="text/css" href="GameOfLife.css">
-
+		<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<script src="lib/jquery.min.js"></script>
+		<script type="text/javascript" src="lib/jquery-ui-1.8.17.custom.min.js"></script>
 		<script src="gameoflife.js" ></script>
 		<script type="text/javascript">
-		
-
- 		</script>
+			$(function() {
+				$( "#check" ).button();
+				$( "button").button();
+				//$( "#format" ).buttonset();
+			});
+		</script>
+		<style>
+			#format { margin-top: 2em; }
+		</style>
 		
 	</head>
 	<body>
 		<div>
-			<button onclick="updateBoard()">Oppdatert!</button>
+			<button onclick="nextGeneration()">Oppdater!</button>
+			<button onclick="clearGame()">Nullstill</button>
+			<input type="checkbox" id="check" /><label for="check">Toggle</label>
 		</div>
 	</body>
 </html>

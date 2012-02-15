@@ -13,7 +13,8 @@ GameOfLife.addBoardPoint = function(boardPoint){
 	this.currentBoardPoints.push(boardPoint);
 };
 GameOfLife.resetState = function(){
-	this.currentBoardPoints = [];
+	//this.currentBoardPoints = [];
+	this.currentBoardPoints.length = 0;
 };
 
 GameOfLife.removePoint = function(boardPoint){
@@ -169,6 +170,7 @@ GameOfLife.drawBoard = function(){
 };
 
 GameOfLife.drawSquareFromMousePoint = function (pointX, pointY){
+	// Kunne vi hatt denne koden i en funksjon?
 		pointX = pointX - (this.offset + this.paddingAroundGrid);
 		pointY = pointY - (this.offset + this.paddingAroundGrid);
 		x = pointX / this.sizeOfSquare;
@@ -213,16 +215,26 @@ function pausecomp(ms) {
 	while (new Date() < ms){}
 }; 
 
-function updateBoard(){
-	//alert("gfdg");
+function nextGeneration(){
 	GameOfLife.nextStep();
-	//pausecomp(2000);
-	
-	GameOfLife.context.clearRect(0, 0, GameOfLife.canvasWidth, GameOfLife.canvasHeight);
-	GameOfLife.context.beginPath();
+	clearBoard();
+	drawBoard();
+};
 
+function clearBoard(){
+	GameOfLife.context.clearRect(0, 0, GameOfLife.canvasWidth, GameOfLife.canvasHeight);
+	GameOfLife.context.beginPath();	
+};
+
+function drawBoard(){
 	GameOfLife.drawBoard();
 	GameOfLife.currentBoardPoints.draw(GameOfLife);	
+};
+
+function clearGame(){
+	GameOfLife.resetState();
+	clearBoard();
+	drawBoard();
 };
 
 $(document).ready(function(){
