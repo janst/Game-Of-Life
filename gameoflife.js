@@ -4,10 +4,12 @@
 
 
 var GameOfLife = {};
+var timerIsOn = 0;
+var timerId;
 
 // Model
-GameOfLife.horizontalSize = 10;
-GameOfLife.verticalSize = 10;
+GameOfLife.horizontalSize = 40;
+GameOfLife.verticalSize = 40;
 GameOfLife.currentBoardPoints = [];
 GameOfLife.addBoardPoint = function(boardPoint){
 	this.currentBoardPoints.push(boardPoint);
@@ -41,8 +43,8 @@ var boardPoint = function (spec) {
 // Drawing
 GameOfLife.currentBoardPoints.draw = function (gameOfLife) {
 	for (i = 0; i < this.length; i += 1) {
-		gameOfLife.context.rect(gameOfLife.offset + gameOfLife.paddingAroundGrid + (this[i].getX()-1)*gameOfLife.sizeOfSquare, gameOfLife.offset + 
-			gameOfLife.paddingAroundGrid + (this[i].getY()-1)*gameOfLife.sizeOfSquare, gameOfLife.sizeOfSquare, gameOfLife.sizeOfSquare);
+		gameOfLife.context.rect(gameOfLife.offset + gameOfLife.paddingAroundGrid + (this[i].getX()-1)*gameOfLife.sizeOfSquare(), gameOfLife.offset + 
+			gameOfLife.paddingAroundGrid + (this[i].getY()-1)*gameOfLife.sizeOfSquare(), gameOfLife.sizeOfSquare(), gameOfLife.sizeOfSquare());
 		gameOfLife.context.fillStyle = "black";
 		gameOfLife.context.fill();
 	}
@@ -141,25 +143,40 @@ GameOfLife.hasBoardPoint = function (boardPoint) {
 	return false;
 };
 
-GameOfLife.boardWidth = 400;
-GameOfLife.boardHeight = 400;
+GameOfLife.boardWidth = 800;
+GameOfLife.boardHeight = 800;
 //padding around grid
 GameOfLife.paddingAroundGrid = 10;
 //size of canvas
 GameOfLife.canvasWidth = GameOfLife.boardWidth + (GameOfLife.paddingAroundGrid*2) + 1;
 GameOfLife.canvasHeight = GameOfLife.boardHeight + (GameOfLife.paddingAroundGrid*2) + 1;
 
-GameOfLife.sizeOfSquare = 40;
+//GameOfLife.sizeOfSquare = 20;
+GameOfLife.sizeOfSquare = function(){
+	if (GameOfLife.boardWidth !== GameOfLife.boardHeight){
+		/*throw {
+            name: 'Init error',
+            message: 'the app only supports boards where horizontal and vertical size are equal'
+        }*/
+       //alert("Init error. The app only supports boards where horizontal and vertical size are equal.");
+	}
+	
+	// Should handle error in a validation function after all default values are being set.
+	
+	return GameOfLife.boardWidth / GameOfLife.horizontalSize;
+	
+	//return 20;
+};
 GameOfLife.offset = 0.5;
 
 GameOfLife.drawBoard = function(){
-    for (var x = 0; x <= this.boardWidth; x += this.sizeOfSquare) {
+    for (var x = 0; x <= this.boardWidth; x += this.sizeOfSquare()) {
         this.context.moveTo(this.offset + x + this.paddingAroundGrid, this.paddingAroundGrid);
         this.context.lineTo(this.offset + x + this.paddingAroundGrid, this.boardHeight + this.paddingAroundGrid);
     }
 
 
-    for (var x = 0; x <= this.boardHeight; x += this.sizeOfSquare) {
+    for (var x = 0; x <= this.boardHeight; x += this.sizeOfSquare()) {
         this.context.moveTo(this.paddingAroundGrid, this.offset + x + this.paddingAroundGrid);
         this.context.lineTo(this.boardWidth + this.paddingAroundGrid, this.offset + x + this.paddingAroundGrid);
     }
@@ -173,8 +190,8 @@ GameOfLife.drawSquareFromMousePoint = function (pointX, pointY){
 	// Kunne vi hatt denne koden i en funksjon?
 		pointX = pointX - (this.offset + this.paddingAroundGrid);
 		pointY = pointY - (this.offset + this.paddingAroundGrid);
-		x = pointX / this.sizeOfSquare;
-		y = pointY / this.sizeOfSquare;
+		x = pointX / this.sizeOfSquare();
+		y = pointY / this.sizeOfSquare();
 		//alert(x);
 		//drawGenericSquare(Math.ceil(x), Math.ceil(y));
 		this.addBoardPoint(boardPoint({x: Math.ceil(x), y: Math.ceil(y)}));
@@ -235,6 +252,24 @@ function clearGame(){
 	GameOfLife.resetState();
 	clearBoard();
 	drawBoard();
+};
+
+function loop(){
+	nextGeneration();
+	timerId = setTimeout("loop()",1000);
+};
+
+function toggleLoop(){
+	console.log("Entering loop");
+	if (!timerIsOn)
+  	{
+  		timerIsOn = 1;
+  		loop();
+  	}
+  	else {
+  		clearTimeout(timerId);
+		timerIsOn = 0;
+  	}
 };
 
 $(document).ready(function(){
