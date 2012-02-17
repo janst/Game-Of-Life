@@ -8,8 +8,8 @@ var timerIsOn = 0;
 var timerId;
 
 // Model
-GameOfLife.horizontalSize = 40;
-GameOfLife.verticalSize = 40;
+GameOfLife.horizontalSize = 20;
+GameOfLife.verticalSize = 20;
 GameOfLife.currentBoardPoints = [];
 GameOfLife.addBoardPoint = function(boardPoint){
 	this.currentBoardPoints.push(boardPoint);
@@ -45,7 +45,8 @@ GameOfLife.currentBoardPoints.draw = function (gameOfLife) {
 	for (i = 0; i < this.length; i += 1) {
 		gameOfLife.context.rect(gameOfLife.offset + gameOfLife.paddingAroundGrid + (this[i].getX()-1)*gameOfLife.sizeOfSquare(), gameOfLife.offset + 
 			gameOfLife.paddingAroundGrid + (this[i].getY()-1)*gameOfLife.sizeOfSquare(), gameOfLife.sizeOfSquare(), gameOfLife.sizeOfSquare());
-		gameOfLife.context.fillStyle = "black";
+		//gameOfLife.context.fillStyle = "black";
+		gameOfLife.context.fillStyle = "1C94C4";
 		gameOfLife.context.fill();
 	}
 };
@@ -146,10 +147,11 @@ GameOfLife.hasBoardPoint = function (boardPoint) {
 GameOfLife.boardWidth = 800;
 GameOfLife.boardHeight = 800;
 //padding around grid
-GameOfLife.paddingAroundGrid = 10;
+GameOfLife.paddingAroundGrid = 0;
 //size of canvas
-GameOfLife.canvasWidth = GameOfLife.boardWidth + (GameOfLife.paddingAroundGrid*2) + 1;
-GameOfLife.canvasHeight = GameOfLife.boardHeight + (GameOfLife.paddingAroundGrid*2) + 1;
+GameOfLife.offset = 0.5;		// To make crisp lines
+GameOfLife.canvasWidth = GameOfLife.boardWidth + (GameOfLife.paddingAroundGrid*2) + 2 * GameOfLife.offset;
+GameOfLife.canvasHeight = GameOfLife.boardHeight + (GameOfLife.paddingAroundGrid*2) + 2 * GameOfLife.offset;
 
 //GameOfLife.sizeOfSquare = 20;
 GameOfLife.sizeOfSquare = function(){
@@ -167,7 +169,6 @@ GameOfLife.sizeOfSquare = function(){
 	
 	//return 20;
 };
-GameOfLife.offset = 0.5;
 
 GameOfLife.drawBoard = function(){
     for (var x = 0; x <= this.boardWidth; x += this.sizeOfSquare()) {
@@ -178,10 +179,10 @@ GameOfLife.drawBoard = function(){
 
     for (var x = 0; x <= this.boardHeight; x += this.sizeOfSquare()) {
         this.context.moveTo(this.paddingAroundGrid, this.offset + x + this.paddingAroundGrid);
-        this.context.lineTo(this.boardWidth + this.paddingAroundGrid, this.offset + x + this.paddingAroundGrid);
+        this.context.lineTo(this.boardWidth + 2*GameOfLife.offset + this.paddingAroundGrid, this.offset + x + this.paddingAroundGrid);
     }
-
-    this.context.strokeStyle = "black";
+	this.context.lineWidth = 1;
+    this.context.strokeStyle = "#ccc";
     //context.strokeStyle = "lightgray";
     this.context.stroke();
 };
@@ -275,7 +276,7 @@ function toggleLoop(){
 $(document).ready(function(){
 	
 	// Init board
-	GameOfLife.canvas = $('<canvas/>').attr({width: GameOfLife.canvasWidth, height: GameOfLife.canvasHeight}).appendTo('body');
+	GameOfLife.canvas = $('<canvas/>').attr({width: GameOfLife.canvasWidth, height: GameOfLife.canvasHeight}).appendTo('#board');
 	GameOfLife.context = GameOfLife.canvas.get(0).getContext("2d");
 	GameOfLife.canvas.get(0).addEventListener('click', function(evt){
 		var mousePos = getMousePos(GameOfLife.canvas.get(0), evt);
@@ -298,5 +299,22 @@ $(document).ready(function(){
 	//GameOfLife.nextStep();
 	GameOfLife.currentBoardPoints.draw(GameOfLife);
 	
-	//alert(GameOfLife.currentBoardPoints.numOfNeighbours());
+	$("#menu").position({
+					my : "center top",
+					at : "center top",
+					of : "#content",
+					offset: "0 30"
+				});
+	$("#board").position({
+					my : "left bottom",
+					at : "left top",
+					of : "#menu",
+					offset: "0 -30" 
+				});		
+	/*$("#menu").position({
+					my : "center center",
+					at : "center center",
+					of : "body"
+				});				
+	//alert(GameOfLife.currentBoardPoints.numOfNeighbours());*/
  	});

@@ -29,11 +29,16 @@
 		</style>
 		
 	</head>
-	<body>
-		<div>
-			<button onclick="nextGeneration()">Oppdater!</button>
-			<button onclick="clearGame()">Nullstill</button>
-			<input type="checkbox" id="check" onclick="toggleLoop()" /><label for="check">Toggle</label>
+	<body id="thebody">
+		<div id="content">
+			<div id="menu" style="width: 900px;">
+				<button onclick="nextGeneration()">Oppdater!</button>
+				<button onclick="clearGame()">Nullstill</button>
+				<input type="checkbox" id="check" onclick="toggleLoop()" /><label for="check">Toggle</label>
+			</div>
+			<div id="board" style="width: 900px;">
+				
+			</div>
 		</div>
 	</body>
 </html>
