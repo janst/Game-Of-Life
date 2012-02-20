@@ -6,10 +6,15 @@
 var GameOfLife = {};
 var timerIsOn = 0;
 var timerId;
+var Configuration = {
+	"loopInterval" : 1000, 
+	"boardSizeHorizontal" : 20,
+	"boardSizeVertical" : 20
+};
 
 // Model
-GameOfLife.horizontalSize = 20;
-GameOfLife.verticalSize = 20;
+//Configuration.boardSizeHorizontal = Configuration.boardSize;
+//GameOfLife.verticalSize = Configuration.boardSize;
 GameOfLife.currentBoardPoints = [];
 GameOfLife.addBoardPoint = function(boardPoint){
 	this.currentBoardPoints.push(boardPoint);
@@ -46,7 +51,7 @@ GameOfLife.currentBoardPoints.draw = function (gameOfLife) {
 		gameOfLife.context.rect(gameOfLife.offset + gameOfLife.paddingAroundGrid + (this[i].getX()-1)*gameOfLife.sizeOfSquare(), gameOfLife.offset + 
 			gameOfLife.paddingAroundGrid + (this[i].getY()-1)*gameOfLife.sizeOfSquare(), gameOfLife.sizeOfSquare(), gameOfLife.sizeOfSquare());
 		//gameOfLife.context.fillStyle = "black";
-		gameOfLife.context.fillStyle = "1C94C4";
+		gameOfLife.context.fillStyle = "#1C94C4";
 		gameOfLife.context.fill();
 	}
 };
@@ -67,8 +72,8 @@ GameOfLife.nextStep = function(){
 	
 	var nextGenBoardPoints = [];
 	// loop through all points
-	for (var x = 1; x <= this.horizontalSize; x += 1){
-		for (var y = 1; y <= this.verticalSize; y += 1){
+	for (var x = 1; x <= Configuration.boardSizeHorizontal; x += 1){
+		for (var y = 1; y <= Configuration.boardSizeVertical; y += 1){
 		// for each point find if it is dead og live
 			if (this.hasBoardPoint(boardPoint({x: x, y: y}))){
 				// if live, apply rules against current points, still live cells are added to next gen list	
@@ -165,7 +170,7 @@ GameOfLife.sizeOfSquare = function(){
 	
 	// Should handle error in a validation function after all default values are being set.
 	
-	return GameOfLife.boardWidth / GameOfLife.horizontalSize;
+	return GameOfLife.boardWidth / Configuration.boardSizeHorizontal;
 	
 	//return 20;
 };
@@ -257,7 +262,7 @@ function clearGame(){
 
 function loop(){
 	nextGeneration();
-	timerId = setTimeout("loop()",1000);
+	timerId = setTimeout("loop()",Configuration.loopInterval);
 };
 
 function toggleLoop(){
@@ -271,6 +276,90 @@ function toggleLoop(){
   		clearTimeout(timerId);
 		timerIsOn = 0;
   	}
+};
+
+function changeTimeValue(){
+	var timerValue = $("#timer").val();
+	console.log(timerValue);
+	Configuration.loopInterval = timerValue;
+};
+
+function changeBoardSize(){
+	var boardSize = $("#boardSize").val();
+	console.log(boardSize);
+	Configuration.boardSizeHorizontal = boardSize;
+	Configuration.boardSizeVertical = boardSize;
+};
+
+function setBoardPattern(){
+	var boardPattern = $("#boardPattern").val();
+	console.log(boardPattern);
+	clearGame();
+	if(boardPattern === "1"){
+		GameOfLife.addBoardPoint(boardPoint({x: 6, y: 5}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 6, y: 6}));
+		GameOfLife.addBoardPoint(boardPoint({x: 6, y: 7}));
+	} else if (boardPattern === "2"){
+		GameOfLife.addBoardPoint(boardPoint({x: 3, y: 3}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 3, y: 4}));
+		GameOfLife.addBoardPoint(boardPoint({x: 4, y: 3}));
+		GameOfLife.addBoardPoint(boardPoint({x: 6, y: 5}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 6, y: 6}));
+		GameOfLife.addBoardPoint(boardPoint({x: 5, y: 6}));
+	} else if (boardPattern === "3"){
+		GameOfLife.addBoardPoint(boardPoint({x: 3, y: 5}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 4, y: 5}));
+		GameOfLife.addBoardPoint(boardPoint({x: 5, y: 5}));
+		GameOfLife.addBoardPoint(boardPoint({x: 5, y: 4}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 4, y: 3}));
+	} else if (boardPattern === "4"){
+		GameOfLife.addBoardPoint(boardPoint({x: 12, y: 14}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 13, y: 14}));
+		GameOfLife.addBoardPoint(boardPoint({x: 13, y: 12}));
+		GameOfLife.addBoardPoint(boardPoint({x: 15, y: 13}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 16, y: 14}));
+		GameOfLife.addBoardPoint(boardPoint({x: 17, y: 14}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 18, y: 14}));
+	} else if (boardPattern === "5"){
+		GameOfLife.addBoardPoint(boardPoint({x: 2, y: 6}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 2, y: 7}));
+		GameOfLife.addBoardPoint(boardPoint({x: 3, y: 6}));
+		GameOfLife.addBoardPoint(boardPoint({x: 3, y: 7}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 12, y: 6}));
+		GameOfLife.addBoardPoint(boardPoint({x: 12, y: 7}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 12, y: 8}));
+		GameOfLife.addBoardPoint(boardPoint({x: 13, y: 5}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 13, y: 9}));
+		GameOfLife.addBoardPoint(boardPoint({x: 14, y: 4}));
+		GameOfLife.addBoardPoint(boardPoint({x: 14, y: 10}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 15, y: 4}));
+		GameOfLife.addBoardPoint(boardPoint({x: 15, y: 10}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 16, y: 7}));
+		GameOfLife.addBoardPoint(boardPoint({x: 17, y: 5}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 17, y: 9}));
+		GameOfLife.addBoardPoint(boardPoint({x: 18, y: 6}));
+		GameOfLife.addBoardPoint(boardPoint({x: 18, y: 7}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 18, y: 8}));
+		GameOfLife.addBoardPoint(boardPoint({x: 19, y: 7}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 22, y: 4}));
+		GameOfLife.addBoardPoint(boardPoint({x: 22, y: 5}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 22, y: 6}));
+		GameOfLife.addBoardPoint(boardPoint({x: 23, y: 4}));
+		GameOfLife.addBoardPoint(boardPoint({x: 23, y: 5}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 23, y: 6}));
+		GameOfLife.addBoardPoint(boardPoint({x: 24, y: 3}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 24, y: 7}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 26, y: 2}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 26, y: 3}));
+		GameOfLife.addBoardPoint(boardPoint({x: 26, y: 7}));
+		GameOfLife.addBoardPoint(boardPoint({x: 26, y: 8}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 36, y: 4}));
+		GameOfLife.addBoardPoint(boardPoint({x: 36, y: 5}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 37, y: 4}));	
+		GameOfLife.addBoardPoint(boardPoint({x: 37, y: 5}));			
+	}		
+	
+	drawBoard();
 };
 
 $(document).ready(function(){
@@ -311,6 +400,11 @@ $(document).ready(function(){
 					of : "#menu",
 					offset: "0 -30" 
 				});		
+	$("#selects").position({
+					my : "left top",
+					at : "right top",
+					of : "#buttons"
+				});					
 	/*$("#menu").position({
 					my : "center center",
 					at : "center center",

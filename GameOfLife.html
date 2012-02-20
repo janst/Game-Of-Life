@@ -12,29 +12,81 @@
 		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
 		<link rel="stylesheet" type="text/css" href="GameOfLife.css">
 		<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
+		<link rel="Stylesheet" href="css/ui.selectmenu.css" type="text/css" />
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<script src="lib/jquery.min.js"></script>
 		<script type="text/javascript" src="lib/jquery-ui-1.8.17.custom.min.js"></script>
+		<script type="text/javascript" src="lib/ui.selectmenu.js"></script>
 		<script src="gameoflife.js" ></script>
 		<script type="text/javascript">
 			$(function() {
 				$( "#check" ).button();
 				$( "button").button();
+				$("select#timer").selectmenu();
 				//$( "#format" ).buttonset();
 			});
 		</script>
 		<style>
 			#format { margin-top: 2em; }
 		</style>
+		<style type="text/css">
+			/*demo styles*/
+			body {font-size: 100%; font-family:"Verdana",sans-serif; margin: 10px 10px;}
+			fieldset { border:0;  margin-bottom: 0px;}	
+			label,select,.ui-select-menu { float: left; margin-right: 10px; }
+			select { width: 150px; }
+			
+			/*select with custom icons*/
+			/*body a.customicons { height: 2.8em;}
+			body .customicons li a, body a.customicons span.ui-selectmenu-status { line-height: 2em; padding-left: 30px !important; }
+			body .video .ui-selectmenu-item-icon, body .podcast .ui-selectmenu-item-icon, body .rss .ui-selectmenu-item-icon { height: 24px; width: 24px; }
+			body .video .ui-selectmenu-item-icon { background: url(sample_icons/24-video-square.png) 0 0 no-repeat; }
+			body .podcast .ui-selectmenu-item-icon { background: url(sample_icons/24-podcast-square.png) 0 0 no-repeat; }
+			body .rss .ui-selectmenu-item-icon { background: url(sample_icons/24-rss-square.png) 0 0 no-repeat; }*/
+	</style>
 		
 	</head>
 	<body id="thebody">
 		<div id="content">
 			<div id="menu" style="width: 900px;">
-				<button onclick="nextGeneration()">Oppdater!</button>
-				<button onclick="clearGame()">Nullstill</button>
-				<input type="checkbox" id="check" onclick="toggleLoop()" /><label for="check">Toggle</label>
+				<div id="buttons" style="width: 450px">
+					<button onclick="nextGeneration()">Oppdater!</button>
+					<button onclick="clearGame()">Nullstill</button>				
+					<input type="checkbox" id="check" onclick="toggleLoop()" /><label for="check">Toggle</label>
+				</div>
+				<div id="selects" style="width: 450px">
+					<!--<form action="#">	-->	
+						<fieldset>
+							<label for="speedA">Time loop:</label>
+							<select name="timer" id="timer" onchange="changeTimeValue()">
+								<option value="250">250 mS</option>
+								<option value="500">500 mS</option>
+								<option value="1000" selected="selected">1000 mS</option>
+								<option value="2000">2000 mS</option>
+							</select>
+						</fieldset>		
+						<!--<fieldset>
+							<label for="speedA">Board size:</label>
+							<select name="boardSize" id="boardSize" onchange="changeBoardSize()">
+								<option value="10">10 x 10</option>
+								<option value="20" selected="selected">20 x 20</option>
+								<option value="40">40 x 40</option>
+								<option value="80">80 x 80</option>
+							</select>
+						</fieldset>			
+						<fieldset>
+							<label for="speedA">Patterns:</label>
+							<select name="boardPattern" id="boardPattern" onchange="setBoardPattern()">
+								<option value="1" selected="selected">Blinker</option>
+								<option value="2" >Beacon</option>
+								<option value="3">Glider</option>
+								<option value="4">Acorn</option>
+								<option value="5">Glider Gun</option>
+							</select>
+						</fieldset>		-->																	
+					<!--</form>-->
+				</div>
 			</div>
 			<div id="board" style="width: 900px;">
 				
