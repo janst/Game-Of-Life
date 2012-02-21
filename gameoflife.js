@@ -270,11 +270,13 @@ function toggleLoop(){
 	if (!timerIsOn)
   	{
   		timerIsOn = 1;
+		$("#toogleControl").button( "option", "label", "Stop" );
   		loop();
   	}
   	else {
   		clearTimeout(timerId);
 		timerIsOn = 0;
+		$("#toogleControl").button( "option", "label", "Start" );
   	}
 };
 
@@ -289,6 +291,8 @@ function changeBoardSize(){
 	console.log(boardSize);
 	Configuration.boardSizeHorizontal = boardSize;
 	Configuration.boardSizeVertical = boardSize;
+	clearBoard();
+	drawBoard();
 };
 
 function setBoardPattern(){
@@ -388,23 +392,44 @@ $(document).ready(function(){
 	//GameOfLife.nextStep();
 	GameOfLife.currentBoardPoints.draw(GameOfLife);
 	
-	$("#menu").position({
+	$("#header").position({
 					my : "center top",
 					at : "center top",
 					of : "#content",
-					offset: "0 30"
+					offset: "0 10"
 				});
+	$("#menu").position({
+					my : "center top",
+					at : "center bottom",
+					of : "#header",
+					offset: "0 30"
+				});				
 	$("#board").position({
 					my : "left bottom",
 					at : "left top",
 					of : "#menu",
-					offset: "0 -30" 
+					offset: "0 -10" 
 				});		
+	$("#buttons").position({
+					my : "left top",
+					at : "left top",
+					of : "#menu"
+				});					
 	$("#selects").position({
 					my : "left top",
 					at : "right top",
 					of : "#buttons"
-				});					
+				});	
+	/*$("#buttonsDiv").position({
+					my : "left top",
+					at : "left top",
+					of : "#buttons"
+				});	
+	$("#toggleButtonDiv").position({
+					my : "left top",
+					at : "right top",
+					of : "#buttonsDiv"
+				});	*/										
 	/*$("#menu").position({
 					my : "center center",
 					at : "center center",

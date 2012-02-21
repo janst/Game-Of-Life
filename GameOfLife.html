@@ -2,9 +2,6 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
-		Remove this if you use the .htaccess -->
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<title>Game Of Life</title>
 		<meta name="description" content="" />
 		<meta name="author" content="Jan Storenes" />
@@ -21,9 +18,11 @@
 		<script src="gameoflife.js" ></script>
 		<script type="text/javascript">
 			$(function() {
-				$( "#check" ).button();
+				$( "#toogleControl" ).button();
 				$( "button").button();
 				$("select#timer").selectmenu();
+				$("select#boardSize").selectmenu();
+				$("select#boardPattern").selectmenu();
 				//$( "#format" ).buttonset();
 			});
 		</script>
@@ -32,10 +31,12 @@
 		</style>
 		<style type="text/css">
 			/*demo styles*/
-			body {font-size: 100%; font-family:"Verdana",sans-serif; margin: 10px 10px;}
+			body {font-size: 90%; font-family:"Verdana",sans-serif; margin: 10px 10px;}
 			fieldset { border:0;  margin-bottom: 0px;}	
 			label,select,.ui-select-menu { float: left; margin-right: 10px; }
 			select { width: 150px; }
+			.selectLabel {width: 90px}
+			.header {font-weight: bold; font-size: 100%; padding-left: 5px}
 			
 			/*select with custom icons*/
 			/*body a.customicons { height: 2.8em;}
@@ -49,25 +50,34 @@
 	</head>
 	<body id="thebody">
 		<div id="content">
+			<div class="header" id="header" style="width: 900px;">	
+				Game Of Life - a javascript version			
+			</div>
 			<div id="menu" style="width: 900px;">
-				<div id="buttons" style="width: 450px">
-					<button onclick="nextGeneration()">Oppdater!</button>
-					<button onclick="clearGame()">Nullstill</button>				
-					<input type="checkbox" id="check" onclick="toggleLoop()" /><label for="check">Toggle</label>
+				<div id="buttons" style="width: 500px;display:inline-block">
+					<!--<div id="toggleButtonDiv" style="display:inline-block;position: absolute; padding-top: 2px; padding-left: 8px">-->
+						<div id="toggleButtonDiv" style="display:inline-block;position: absolute;padding-top: 2px; padding-left: 3px">
+						<input type="checkbox" id="toogleControl" onclick="toggleLoop()" /><label id="toogleControlLabel" for="toogleControl">Start</label>
+					</div>
+					<div id="buttonsDiv" style="display:inline-block; padding-left: 90px">
+					<button onclick="nextGeneration()">Update</button>
+					<button onclick="clearGame()">Clear</button>
+					</div>				
 				</div>
-				<div id="selects" style="width: 450px">
+				<div id="selects" style="width: 300px; display:inline-block; padding-top: 5px">
 					<!--<form action="#">	-->	
 						<fieldset>
-							<label for="speedA">Time loop:</label>
+							<label class="selectLabel" for="timerLabel">Time loop:</label>
 							<select name="timer" id="timer" onchange="changeTimeValue()">
+								<option value="100">100 mS</option>
 								<option value="250">250 mS</option>
 								<option value="500">500 mS</option>
 								<option value="1000" selected="selected">1000 mS</option>
 								<option value="2000">2000 mS</option>
 							</select>
 						</fieldset>		
-						<!--<fieldset>
-							<label for="speedA">Board size:</label>
+						<fieldset>
+							<label class="selectLabel" for="boardSizeLabel">Resolution:</label>
 							<select name="boardSize" id="boardSize" onchange="changeBoardSize()">
 								<option value="10">10 x 10</option>
 								<option value="20" selected="selected">20 x 20</option>
@@ -76,7 +86,7 @@
 							</select>
 						</fieldset>			
 						<fieldset>
-							<label for="speedA">Patterns:</label>
+							<label class="selectLabel" for="boardPatternLabel">Patterns:</label>
 							<select name="boardPattern" id="boardPattern" onchange="setBoardPattern()">
 								<option value="1" selected="selected">Blinker</option>
 								<option value="2" >Beacon</option>
@@ -84,12 +94,11 @@
 								<option value="4">Acorn</option>
 								<option value="5">Glider Gun</option>
 							</select>
-						</fieldset>		-->																	
+						</fieldset>															
 					<!--</form>-->
 				</div>
 			</div>
-			<div id="board" style="width: 900px;">
-				
+			<div id="board" style="width: 900px;">				
 			</div>
 		</div>
 	</body>
