@@ -8,11 +8,6 @@ describe('Game Of Life', function () {
         	GameOfLife.resetState();
 		  }); 
 		  
-		  it('horizontal size', function () {
-		  	var horizontalSize = GameOfLife.horizontalSize;
-			expect(horizontalSize).toEqual(10);
-		  });
-		  
 		  it('create board point', function () {
 		  	var myBoardPoint = boardPoint({x: 3, y: 2});
 			expect(myBoardPoint.getX()).toEqual(3);
