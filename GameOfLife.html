@@ -3,15 +3,11 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Game Of Life</title>
-		<meta name="description" content="" />
+		<meta name="description" content="A JavaScript implementation of the game Game Of Life." />
 		<meta name="author" content="Jan Storenes" />
-		<!--<meta name="viewport" content="width=device-width; initial-scale=1.0" />-->
-		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
 		<link rel="stylesheet" type="text/css" href="GameOfLife.css">
 		<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
 		<link rel="Stylesheet" href="css/ui.selectmenu.css" type="text/css" />
-		<link rel="shortcut icon" href="/favicon.ico" />
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<script src="lib/jquery.min.js"></script>
 		<script type="text/javascript" src="lib/jquery-ui-1.8.17.custom.min.js"></script>
 		<script type="text/javascript" src="lib/ui.selectmenu.js"></script>
@@ -23,49 +19,25 @@
 				$("select#timer").selectmenu();
 				$("select#boardSize").selectmenu();
 				$("select#boardPattern").selectmenu();
-				//$( "#format" ).buttonset();
 			});
 		</script>
-		<style>
-			#format { margin-top: 2em; }
-		</style>
-		<style type="text/css">
-			/*demo styles*/
-			body {font-size: 90%; font-family:"Verdana",sans-serif; margin: 10px 10px;}
-			fieldset { border:0;  margin-bottom: 0px;}	
-			label,select,.ui-select-menu { float: left; margin-right: 10px; }
-			select { width: 150px; }
-			.selectLabel {width: 90px}
-			.header {font-weight: bold; font-size: 100%; padding-left: 5px}
-			
-			/*select with custom icons*/
-			/*body a.customicons { height: 2.8em;}
-			body .customicons li a, body a.customicons span.ui-selectmenu-status { line-height: 2em; padding-left: 30px !important; }
-			body .video .ui-selectmenu-item-icon, body .podcast .ui-selectmenu-item-icon, body .rss .ui-selectmenu-item-icon { height: 24px; width: 24px; }
-			body .video .ui-selectmenu-item-icon { background: url(sample_icons/24-video-square.png) 0 0 no-repeat; }
-			body .podcast .ui-selectmenu-item-icon { background: url(sample_icons/24-podcast-square.png) 0 0 no-repeat; }
-			body .rss .ui-selectmenu-item-icon { background: url(sample_icons/24-rss-square.png) 0 0 no-repeat; }*/
-	</style>
-		
 	</head>
 	<body id="thebody">
 		<div id="content">
-			<div class="header" id="header" style="width: 900px;">	
+			<div class="header" id="header">	
 				Game Of Life - a javascript version			
 			</div>
-			<div id="menu" style="width: 900px;">
-				<div id="buttons" style="width: 500px;display:inline-block">
-					<!--<div id="toggleButtonDiv" style="display:inline-block;position: absolute; padding-top: 2px; padding-left: 8px">-->
-						<div id="toggleButtonDiv" style="display:inline-block;position: absolute;padding-top: 2px; padding-left: 3px">
+			<div class="menu" id="menu">
+				<div id="buttons" class="buttons">
+						<div class="toggleButtonDiv" id="toggleButtonDiv">
 						<input type="checkbox" id="toogleControl" onclick="toggleLoop()" /><label id="toogleControlLabel" for="toogleControl">Start</label>
 					</div>
-					<div id="buttonsDiv" style="display:inline-block; padding-left: 90px">
+					<div class="buttonsDiv" id="buttonsDiv">
 					<button onclick="nextGeneration()">Update</button>
 					<button onclick="clearGame()">Clear</button>
 					</div>				
 				</div>
-				<div id="selects" style="width: 300px; display:inline-block; padding-top: 5px">
-					<!--<form action="#">	-->	
+				<div class="selects" id="selects">
 						<fieldset>
 							<label class="selectLabel" for="timerLabel">Time loop:</label>
 							<select name="timer" id="timer" onchange="changeTimeValue()">
@@ -95,10 +67,9 @@
 								<option value="5">Glider Gun</option>
 							</select>
 						</fieldset>															
-					<!--</form>-->
 				</div>
 			</div>
-			<div id="board" style="width: 900px;">				
+			<div class="board" id="board">				
 			</div>
 		</div>
 	</body>
